@@ -10,7 +10,7 @@ public class Linear extends Loan {
     }
     @Override
     public double getInterestRate() {
-        return getInitialBalance() * (1 + getMonthlyRate()) - getInitialBalance();
+        return 0;
     }
 
     @Override
