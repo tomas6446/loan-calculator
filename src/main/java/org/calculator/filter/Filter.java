@@ -14,15 +14,10 @@ public class Filter implements FilterInterface {
 
     @Override
     public void printMonthStat() {
-        int months = loan.getYear() * 12 + loan.getMonth();
         System.out.println("\n");
-        for (int i = 0; i < months; i++) {
-            System.out.format("%10d%s", i + 1, " Months");
+        System.out.format("%12s%20s%20s%20s%20s%20s%n", "initial", "month", "payment", "principal", "interest", "ending balance");
+        for (int i = 1; i <= loan.getPeriod(); i++) {
+            System.out.format("%12d%20.2f%20.2f%20.2f%20.2f%20.2f%n", i, loan.getBalance(), loan.getPayment(), loan.getPrinciple(), loan.getInterestRate(), loan.getEndBalance());
         }
-        System.out.println("\n");
-        for (int i = 0; i < months; i++) {
-            System.out.format("%15.1f", loan.findLoan(i + 1));
-        }
-        System.out.println("\n");
     }
 }
