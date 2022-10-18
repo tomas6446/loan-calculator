@@ -9,6 +9,7 @@ public class Annuity extends Loan {
     }
     @Override
     public double getInterestRate() {
+        super.setTotalInterest(super.getTotalInterest() + (getBalance() * (1 + getMonthlyRate()) - getBalance()));
         return getBalance() * (1 + getMonthlyRate()) - getBalance();
     }
 

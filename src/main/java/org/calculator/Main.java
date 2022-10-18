@@ -9,7 +9,7 @@ import org.calculator.loan.Linear;
  */
 public class Main {
     public static void main(String[] args) {
-        new Filter(new Annuity(1000, 3, 1, 0)).printMonthStat();
-        new Filter(new Linear(1000, 3, 1, 0)).printMonthStat();
+        new Filter(new Annuity(1000, 3, 1, 0)).getMonthStat();
+        new Filter(new Linear(1000, 3, 1, 0)).getMonthStat();
     }
 }
