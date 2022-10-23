@@ -5,5 +5,6 @@ package org.calculator.filter;
  */
 public interface FilterInterface {
     void getMonthStat();
-    void getMonth(int index);
+
+    void getMonthStat(int index);
 }

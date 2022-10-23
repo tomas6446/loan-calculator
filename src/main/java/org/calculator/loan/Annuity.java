@@ -8,13 +8,12 @@ public class Annuity extends Loan {
         super(balance, percent, year, month);
     }
     @Override
-    public double getInterestRate() {
-        super.setTotalInterest(super.getTotalInterest() + (getBalance() * (1 + getMonthlyRate()) - getBalance()));
-        return getBalance() * (1 + getMonthlyRate()) - getBalance();
+    public double findDebtPart() {
+        return findMonthPayment() - findMonthInterest();
     }
 
     @Override
-    public double getPayment() {
-        return (getInitialBalance() * getMonthlyRate()) / (1 - Math.pow(1 + getMonthlyRate(), -(getPeriod())));
+    public double findMonthPayment() {
+        return getInitialBalance() * (getInterestRate() + (getInterestRate() / (Math.pow(1 + getInterestRate(), getPeriod()) - 1)));
     }
 }

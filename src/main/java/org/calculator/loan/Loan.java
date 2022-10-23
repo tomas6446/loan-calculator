@@ -3,49 +3,50 @@ package org.calculator.loan;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Tomas Kozakas
  */
 @Getter
 @Setter
-abstract public class Loan implements LoanInterface {
-    private double balance;
-    private double endingBalance;
+public abstract class Loan implements LoanInterface {
+    private double debtBalance;
     private double initialBalance;
-    private double totalInterest;
+    private double balanceLeft;
+
     private double percent;
-    private int year;
-    private int month;
+    private double interestRate;
+    private int period;
+
 
     public Loan(double balance, double percent, int year, int month) {
-        this.balance = balance;
-        this.percent = percent;
-        this.year = year;
-        this.month = month;
-        this.endingBalance = balance;
         this.initialBalance = balance;
+        this.balanceLeft = balance;
+        this.debtBalance = balance;
+
+        this.period = year * 12 + month;
+        this.interestRate = (percent / 100.0) / 12;
+    }
+
+    public List<Table> getFullTable() {
+        List<Table> table = new ArrayList<>();
+        for (int i = 1; i <= period; i++) {
+            table.add(new Table(i, getDebtBalance(), findMonthPayment(), findMonthInterest(), findDebtPart(), findBalanceLeft()));
+        }
+        return table;
     }
 
     @Override
-    public int getPeriod() {
-        return getYear() * 12 + getMonth();
+    public double findMonthInterest() {
+        return getBalanceLeft() * getInterestRate();
     }
 
     @Override
-    public double getPrinciple() {
-        return getPayment() - getInterestRate();
-    }
-
-    @Override
-    public double getMonthlyRate() {
-        return getPercent() / 100 / getPeriod();
-    }
-
-    @Override
-    public double getEndBalance() {
-        double balance = endingBalance - getPrinciple();
-        setEndingBalance(Math.max(balance, 0));
-        setBalance(endingBalance);
-        return endingBalance;
+    public double findBalanceLeft() {
+        balanceLeft = Math.abs(balanceLeft - findDebtPart());
+        debtBalance = balanceLeft;
+        return balanceLeft;
     }
 }

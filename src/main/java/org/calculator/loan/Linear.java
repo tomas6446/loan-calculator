@@ -8,13 +8,14 @@ public class Linear extends Loan {
     public Linear(double balance, double percent, int year, int month) {
         super(balance, percent, year, month);
     }
+
     @Override
-    public double getInterestRate() {
-        return 0;
+    public double findDebtPart() {
+        return getInitialBalance() / getPeriod();
     }
 
     @Override
-    public double getPayment() {
-        return (getInitialBalance() * getMonthlyRate()) / (1 - Math.pow(1 + getMonthlyRate(), -(getPeriod())));
+    public double findMonthPayment() {
+        return findDebtPart() + findMonthInterest();
     }
 }
