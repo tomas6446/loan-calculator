@@ -11,7 +11,7 @@ import java.util.List;
  * @author Tomas Kozakas
  */
 public class Window extends JFrame {
-    public Window(Loan loan) {
+    public Window(Loan loan, String title) {
         List<Integer> list = new ArrayList<>();
         for (Table table : loan.getFullTable()) {
             list.add((int) table.payment());
@@ -19,8 +19,8 @@ public class Window extends JFrame {
 
         Graph panel = new Graph(list);
 
-        JFrame frame = new JFrame("DrawGraph");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame frame = new JFrame(title);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setLocationByPlatform(true);

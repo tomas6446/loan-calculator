@@ -9,7 +9,7 @@ import org.calculator.loan.Linear;
  */
 public class Main {
     public static void main(String[] args) {
-        new Window(new Annuity(200000, 12, 2, 0));
-        new Window(new Linear(200000, 12, 2, 0));
+        new Window(new Annuity(200000, 12, 2, 0), "Annuity");
+        new Window(new Linear(200000, 12, 2, 0), "Linear");
     }
 }
