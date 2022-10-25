@@ -1,4 +1,4 @@
-package org.calculator.draw;
+package org.calculator.window.companent;
 
 import lombok.Getter;
 import lombok.Setter;

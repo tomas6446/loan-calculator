@@ -20,11 +20,21 @@ public class Filter implements FilterInterface {
             Row row = loan.getTable().getRow(i);
             System.out.format("%12d%20.2f%20.2f%20.2f%20.2f%20.2f%n", i + 1, row.initialBalance(), row.payment(), row.interestRate(), row.debtPart(), row.balanceLeft());
         }
+        System.out.println("\n");
     }
 
     public void getMonthStat(int month) {
         System.out.format("%12s%20s%20s%20s%20s%20s%n", "month", "initial", "payment", "interest", "debt part", "balance left");
         Row row = loan.getTable().getRow(month - 1);
-        System.out.format("%12d%20.2f%20.2f%20.2f%20.2f%20.2f%n", month, row.initialBalance(), row.payment(), row.interestRate(), row.debtPart(), row.balanceLeft());
+        System.out.format("%12d%20.2f%20.2f%20.2f%20.2f%20.2f%n%n", month, row.initialBalance(), row.payment(), row.interestRate(), row.debtPart(), row.balanceLeft());
+    }
+
+    public void getFromMonthStat(int month) {
+        System.out.format("%12s%20s%20s%20s%20s%20s%n", "month", "initial", "payment", "interest", "debt part", "balance left");
+        for (int i = month - 1; i < loan.getTable().getRows().size(); i++) {
+            Row row = loan.getTable().getRow(i);
+            System.out.format("%12d%20.2f%20.2f%20.2f%20.2f%20.2f%n", i + 1, row.initialBalance(), row.payment(), row.interestRate(), row.debtPart(), row.balanceLeft());
+        }
+        System.out.println("\n");
     }
 }

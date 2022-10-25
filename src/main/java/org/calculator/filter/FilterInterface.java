@@ -6,5 +6,7 @@ package org.calculator.filter;
 public interface FilterInterface {
     void getMonthStat();
 
-    void getMonthStat(int index);
+    void getMonthStat(int month);
+
+    void getFromMonthStat(int month);
 }
