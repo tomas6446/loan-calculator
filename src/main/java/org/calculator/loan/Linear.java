@@ -5,6 +5,9 @@ package org.calculator.loan;
  * @author Tomas Kozakas
  */
 public class Linear extends Loan {
+    public Linear() {
+        super();
+    }
     public Linear(double balance, double percent, int year, int month) {
         super(balance, percent, year, month);
     }
