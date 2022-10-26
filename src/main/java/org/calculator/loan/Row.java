@@ -1,4 +1,4 @@
-package org.calculator.loan.table;
+package org.calculator.loan;
 
 /**
  * @author Tomas Kozakas
