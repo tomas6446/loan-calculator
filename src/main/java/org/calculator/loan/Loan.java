@@ -19,10 +19,6 @@ public abstract class Loan implements LoanInterface {
     private double interestRate;
     private int period;
 
-    public Loan() {
-        this(0.0, 0.0, 0, 0);
-    }
-
     public Loan(double balance, double percent, int year, int month) {
         this.initialBalance = balance;
         this.balanceLeft = balance;
@@ -36,6 +32,25 @@ public abstract class Loan implements LoanInterface {
             table.addRow(getDebtBalance(), findMonthPayment(), findMonthInterest(), findDebtPart(), findBalanceLeft());
         }
     }
+
+    public Loan(double balance, double percent, int year, int month, Postponement postponement) {
+        this.initialBalance = balance;
+        this.balanceLeft = balance;
+        this.debtBalance = balance;
+
+        this.period = year * 12 + month;
+        this.interestRate = (percent / 100.0) / 12;
+
+        this.table = new Table();
+        for (int i = 1; i <= period; i++) {
+            if (postponement.getStart() <= i && postponement.getEnd() >= i) {
+                table.addRow(getDebtBalance(), 0, postponement.getPostponementInterestRate(), findDebtPart(), findBalanceLeft());
+            } else {
+                table.addRow(getDebtBalance(), findMonthPayment(), findMonthInterest(), findDebtPart(), findBalanceLeft());
+            }
+        }
+    }
+
 
     @Override
     public double findMonthInterest() {

@@ -5,7 +5,10 @@ package org.calculator.loan;
  */
 public interface LoanInterface {
     double findMonthPayment();
+
     double findMonthInterest();
+
     double findDebtPart();
+
     double findBalanceLeft();
 }

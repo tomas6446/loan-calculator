@@ -29,9 +29,27 @@ public class TextField extends JFormattedTextField implements ActionListener {
         this.setText(text);
     }
 
+    public TextField(String text, boolean editable, int columns) {
+        NumberFormat format = NumberFormat.getInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(0);
+        formatter.setMaximum(Integer.MAX_VALUE);
+        formatter.setAllowsInvalid(false);
+
+        this.setEditable(editable);
+        this.setFont(new JTextField().getFont().deriveFont(15f));
+        this.setColumns(columns);
+        this.setText(text);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String s = e.getActionCommand();
         this.setText(this.getText() + s);
+    }
+
+    public String toString() {
+        return !getText().isEmpty() ? getText() : "0";
     }
 }
