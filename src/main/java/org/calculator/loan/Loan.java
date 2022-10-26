@@ -2,7 +2,6 @@ package org.calculator.loan;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.calculator.loan.table.Table;
 
 /**
  * @author Tomas Kozakas

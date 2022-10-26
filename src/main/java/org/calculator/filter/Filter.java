@@ -1,7 +1,7 @@
 package org.calculator.filter;
 
 import org.calculator.loan.Loan;
-import org.calculator.loan.table.Row;
+import org.calculator.loan.Row;
 
 /**
  * @author Tomas Kozakas
