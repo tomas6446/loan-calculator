@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,5 +38,18 @@ public final class Table {
                 default -> throw new IllegalStateException("Unexpected value: " + name);
             }
         return rowsTemp;
+    }
+
+    public String[][] getRowData() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String[][] data = new String[rows.size()][5];
+        for (Row row : rows) {
+            data[rows.indexOf(row)][0] = df.format(row.initialBalance());
+            data[rows.indexOf(row)][1] = df.format(row.payment());
+            data[rows.indexOf(row)][2] = df.format(row.interestRate());
+            data[rows.indexOf(row)][3] = df.format(row.debtPart());
+            data[rows.indexOf(row)][4] = df.format(row.balanceLeft());
+        }
+        return data;
     }
 }

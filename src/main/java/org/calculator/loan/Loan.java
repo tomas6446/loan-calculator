@@ -13,10 +13,12 @@ public abstract class Loan implements LoanInterface {
     private double debtBalance;
     private double initialBalance;
     private double balanceLeft;
-
     private double percent;
     private double interestRate;
     private int period;
+    private int year;
+    private int month;
+    private Postponement postponement;
 
     public Loan(double balance, double percent, int year, int month) {
         this.initialBalance = balance;
@@ -36,6 +38,7 @@ public abstract class Loan implements LoanInterface {
         this.initialBalance = balance;
         this.balanceLeft = balance;
         this.debtBalance = balance;
+        this.postponement = postponement;
 
         this.period = year * 12 + month;
         this.interestRate = (percent / 100.0) / 12;

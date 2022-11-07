@@ -2,6 +2,7 @@ package org.calculator.window;
 
 import org.calculator.loan.Annuity;
 import org.calculator.loan.Linear;
+import org.calculator.loan.Loan;
 import org.calculator.loan.Postponement;
 import org.calculator.window.companent.ComboBox;
 import org.calculator.window.companent.Graph;
@@ -25,67 +26,76 @@ public class Window extends JFrame implements ActionListener {
     private static TextField postStartMonth;
     private static TextField postPeriod;
     private static TextField postPercent;
-    private static JButton jButton;
     private static ComboBox loanBox;
     private static ComboBox columnBox;
-    private static JPanel inputPanel;
-    private static JPanel postPonementPanel;
+    private static JScrollPane tablePanel;
     private static Graph graphPanel;
+    private static JTable jTable;
+    private static Loan loan;
 
-    public Window() {
-        inputPanel = new JPanel(new FlowLayout());
-        graphPanel = new Graph(new Linear(10000, 15, 1, 0).getTable().getColumn("payment"));
+    public Window(double balance, double percent, int year, int month, Postponement postponement) {
+        loan = new Annuity(balance, percent, year, month, postponement);
+        graphPanel = new Graph(loan.getTable().getColumn("payment"));
+        jTable = new JTable(loan.getTable().getRowData(), new String[]{"initial", "payment", "interest", "debt part", "balance left"});
+        jTable.setFillsViewportHeight(true);
 
+        tablePanel = new JScrollPane(jTable);
+        JPanel inputPanel = new JPanel();
         inputPanel.add(new TextField("Balance:", false));
-        inputPanel.add(balanceTextField = new org.calculator.window.companent.TextField("10000", true));
+        inputPanel.add(balanceTextField = new TextField(String.valueOf(balance), true));
         inputPanel.add(new TextField("Percent:", false));
-        inputPanel.add(percentTextField = new org.calculator.window.companent.TextField("15", true));
+        inputPanel.add(percentTextField = new TextField(String.valueOf(percent), true));
         inputPanel.add(new TextField("Year:", false));
-        inputPanel.add(yearTextField = new org.calculator.window.companent.TextField("1", true));
+        inputPanel.add(yearTextField = new TextField(String.valueOf(year), true));
         inputPanel.add(new TextField("Month:", false));
-        inputPanel.add(monthTextField = new TextField("0", true));
-        inputPanel.add(loanBox = new ComboBox(new String[]{"Linear", "Annuity"}, "Annuity"));
-        inputPanel.add(columnBox = new ComboBox(new String[]{"payment", "initial", "debt part", "balance left"}, "payment"));
-        jButton = new JButton("OK");
+        inputPanel.add(monthTextField = new TextField(String.valueOf(month), true));
+        inputPanel.add(loanBox = new ComboBox(new String[]{"Annuity", "Linear"}, "Annuity"));
+        inputPanel.add(columnBox = new ComboBox(new String[]{"payment", "debt part", "balance left"}, "payment"));
+        inputPanel.add(new TextField("", false, 20));
+        inputPanel.add(new TextField("Postponement", false, 8));
+        inputPanel.add(new TextField("Start:", false));
+        inputPanel.add(postStartMonth = new TextField(String.valueOf(postponement.getStart()), true));
+        inputPanel.add(new TextField("Period:", false));
+        inputPanel.add(postPeriod = new TextField(String.valueOf(postponement.getPeriod()), true));
+        inputPanel.add(new TextField("Percent:", false));
+        inputPanel.add(postPercent = new TextField(String.valueOf(postponement.getPercent()), true));
+
+        JButton jButton = new JButton("OK");
         jButton.addActionListener(e -> {
-            double balance = Double.parseDouble(balanceTextField.toString());
-            double percent = Double.parseDouble(percentTextField.toString());
-            int year = Integer.parseInt(yearTextField.toString());
-            int month = Integer.parseInt(monthTextField.toString());
+            double bal = Double.parseDouble(balanceTextField.toString());
+            double per = Double.parseDouble(percentTextField.toString());
+            int y = Integer.parseInt(yearTextField.toString());
+            int m = Integer.parseInt(monthTextField.toString());
 
             int start = Integer.parseInt(postStartMonth.toString());
-            int end = Integer.parseInt(postPeriod.toString());
+            int period = Integer.parseInt(postPeriod.toString());
             double percentPost = Double.parseDouble(postPercent.toString());
-            Postponement postponement = new Postponement(start, end, percentPost);
+            Postponement post = new Postponement(start, period, percentPost);
 
             jFrame.remove(graphPanel);
+            jFrame.remove(tablePanel);
+
             switch (loanBox.getChosenItem()) {
-                case "Annuity" ->
-                        graphPanel = new Graph(new Annuity(balance, percent, year, month, postponement).getTable().getColumn(columnBox.getChosenItem()));
-                case "Linear" ->
-                        graphPanel = new Graph(new Linear(balance, percent, year, month, postponement).getTable().getColumn(columnBox.getChosenItem()));
+                case "Annuity" -> loan = new Annuity(bal, per, y, m, post);
+                case "Linear" -> loan = new Linear(bal, per, y, m, post);
                 default -> throw new IllegalStateException("Unexpected value: " + loanBox.getChosenItem());
             }
-            jFrame.add(graphPanel);
+            graphPanel = new Graph(loan.getTable().getColumn(columnBox.getChosenItem()));
+            jTable = new JTable(loan.getTable().getRowData(), new String[]{"initial", "payment", "interest", "debt part", "balance left"});
+            jTable.setFillsViewportHeight(true);
+            tablePanel = new JScrollPane(jTable);
+
+            jFrame.add(tablePanel, BorderLayout.CENTER);
+            jFrame.add(graphPanel, BorderLayout.NORTH);
             jFrame.validate();
             jFrame.repaint();
         });
         inputPanel.add(jButton);
 
-        postPonementPanel = new JPanel(new FlowLayout());
-        postPonementPanel.add(new TextField("Postponement", false, 8));
-        postPonementPanel.add(new TextField("Start:", false));
-        postPonementPanel.add(postStartMonth = new TextField("", true));
-        postPonementPanel.add(new TextField("Period:", false));
-        postPonementPanel.add(postPeriod = new TextField("", true));
-        postPonementPanel.add(new TextField("Percent:", false));
-        postPonementPanel.add(postPercent = new TextField("", true));
-
         jFrame = new JFrame("loan graphs");
-        jFrame.setLayout(new BorderLayout());
-        jFrame.getContentPane().add(inputPanel, BorderLayout.NORTH);
-        jFrame.getContentPane().add(postPonementPanel, BorderLayout.AFTER_LAST_LINE);
-        jFrame.getContentPane().add(graphPanel, BorderLayout.EAST);
+        jFrame.add(graphPanel, BorderLayout.NORTH);
+        jFrame.add(tablePanel, BorderLayout.CENTER);
+        jFrame.add(inputPanel, BorderLayout.PAGE_END);
         jFrame.pack();
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         jFrame.setLocationByPlatform(true);
